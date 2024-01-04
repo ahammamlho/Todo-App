@@ -13,13 +13,31 @@ export class TodoService {
     });
   }
 
-  async getTodo(id: string): Promise<Todo> {
+  async getTodo(id: string): Promise<Todo | []> {
     const todo = await this.prisma.todo.findUnique({ where: { id } });
+    if (!todo) return [];
     return todo;
   }
 
   async getAllTodos(): Promise<Todo[]> {
-    const todos = await this.prisma.todo.findMany();
+    const todos = await this.prisma.todo.findMany({
+      where: { isDelete: false },
+    });
+    if (!todos) return [];
     return todos;
+  }
+
+  async updateTodo(id: string, todo: any) {
+    await this.prisma.todo.update({
+      where: { id },
+      data: todo,
+    });
+  }
+
+  async deleteTodo(id: string) {
+    await this.prisma.todo.update({
+      where: { id },
+      data: { isDelete: true },
+    });
   }
 }
