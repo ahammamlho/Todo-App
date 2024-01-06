@@ -1,24 +1,14 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { MdDelete } from "react-icons/md";
-import { fetchData } from "../api/fetch-todos";
-import { changeStatus } from "../api/changeStatus";
-import { deleteTodo } from "../api/delete-todo";
+'use client';
+import React, { useEffect, useState } from 'react';
+import { MdDelete } from 'react-icons/md';
+import { fetchData } from '../api/fetch-todos';
+import { changeStatus } from '../api/changeStatus';
+import { deleteTodo } from '../api/delete-todo';
+import { useGlobalContext } from '../context/store';
 
 const DisplayTodos = () => {
-  const [todos, setTodos] = useState([]);
+  const { todos, setTodos } = useGlobalContext();
 
-  useEffect(() => {
-    const getData = async () => {
-      const temp = await fetchData();
-      setTodos(temp);
-    };
-    getData();
-  }, []);
-
-  const deleteTodof = (id: string) => {
-    deleteTodo(id);
-  };
   return (
     <div className=" w-[50%] rounded-md bg-white mt-3 flex flex-col py-3 ">
       {todos.map((todo: any, index) => {
@@ -32,7 +22,7 @@ const DisplayTodos = () => {
                   changeStatus(todo.id);
                   setTodos((prevTodos: any) => {
                     return prevTodos.map((td: any) =>
-                      td.id === todo.id ? { ...td, isDone: !td.isDone } : td
+                      td.id === todo.id ? { ...td, isDone: !td.isDone } : td,
                     );
                   });
                 }}
