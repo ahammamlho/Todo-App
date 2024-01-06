@@ -6,7 +6,7 @@ import { fetchData } from '../api/fetch-todos';
 
 const AddTodo = () => {
   const [todo, setTodo] = useState('');
-  const { setTodos } = useGlobalContext();
+  const { setUpdateIndex } = useGlobalContext();
   return (
     <div className="h-[7rem] w-[50%] rounded-md bg-white mt-3 flex flex-col items-center justify-center">
       <div className="flex bg-[#F6F7FA] border rounded-[10px]   md:w-[50%]">
@@ -26,8 +26,10 @@ const AddTodo = () => {
         onClick={async () => {
           if (todo.length !== 0) {
             createTodo({ todo: todo });
-            const temp = await fetchData();
-            setTodos(temp);
+            setUpdateIndex((pre) => {
+              if (pre > 0) return -1;
+              return pre - 1;
+            });
             setTodo('');
           }
         }}
